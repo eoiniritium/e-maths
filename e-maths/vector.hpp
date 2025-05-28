@@ -1,76 +1,53 @@
+#pragma once
+
+#include "vector.hpp"
 #include <vector>
 #include <string>
-#include <stdexcept>
-#include <iostream>
 
-namespace EMaths {
-    template <typename T>
+namespace Linalg {
     class Vector {
         private:
-        std::vector<T> vector;
+        std::vector<double> vec;
 
         public:
-        Vector(size_t length) {
-            this->vector = std::vector<T>(length);
+        Vector(size_t n) {
+            vec = std::vector<double>(n, 0);
         }
 
-        Vector(std::vector<T> values) {
-            this->vector = values;
+        Vector(std::vector<double> vals) {
+            vec = vals;
         }
 
-        // GET
-        const T &operator[](size_t idx) const {
-            if(idx < 0 || idx >= this->vector.size()) {
-                throw std::out_of_range("Index out of range.");
-            }
-
-            return this->vector[idx];
+        const double & operator[](size_t idx) const {
+            return vec.at(idx);
         }
 
-        // SET
-        T &operator[](size_t idx) {
-            if(idx < 0 || idx >= this->vector.size()) {
-                throw std::out_of_range("Index out of range.");
-            }
-
-            return this->vector[idx];
+        double & operator[](size_t idx) {
+            return vec.at(idx);
         }
 
-        EMaths::Vector<T> operator*(T &scalar) {
-            
-            EMaths::Vector<T> ret(this->vector.size());
-            
-            for(size_t i = 0; i < this->vector.size(); ++i) {
-                ret[i] = ret[i] * scalar;
+        size_t size() {
+            return vec.size();
+        }
+
+        Vector scale(double scalar) {
+            Vector ret(vec.size());
+
+            for(size_t idx = 0; idx < vec.size(); ++idx) {
+                ret[idx] = scalar * (*this)[idx];
             }
 
             return ret;
         }
 
         std::string string() {
-            size_t n = this->vector.size();
+            std::string ret = "( ";
 
-            if(n == 0) { return "()"; }
-
-            std::string ret = "(";
-
-            for(size_t i = 0; i < n - 1; ++i) {
-                ret += std::to_string(this->vector[i]) + ", ";
+            for(size_t i = 0; i < vec.size(); ++i) {
+                ret += std::to_string(vec[i]) + " ";
             }
 
-            ret += std::to_string(this->vector[n - 1]) + ")";
-
-            return ret;
-        }
-
-        EMaths::Vector<T> scale(T scalar) {
-            EMaths::Vector<T> ret(this->vector.size());
-            
-            for(size_t i = 0; i < this->vector.size(); ++i) {
-                ret[i] = ret[i] * scalar;
-            }
-
-            return ret;
+            return ret + ")";
         }
     };
 }
