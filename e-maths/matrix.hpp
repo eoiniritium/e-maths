@@ -79,6 +79,53 @@ namespace Linalg {
             return ret;
         }
 
+        Linalg::Matrix multiply(Linalg::Matrix &mat) {
+            auto sizeL = this->size();
+            auto sizeR = mat.size();
+            if(sizeL.second != sizeL.first) {
+                throw std::runtime_error("matrix multiplication: incompatible sizes");
+            }
+
+            size_t n = sizeL.first;
+            size_t m = sizeR.second;
+            Linalg::Matrix ret(sizeL.first, sizeL.second);
+
+            for(size_t i = 0; i < n; ++i){
+                for(size_t j = 0; j < m; ++j) {
+                    double entry = 0;
+                    for(size_t k = 0; k < sizeL.second; ++k) {
+                        entry += (*this)[i][k] * mat[k][j];
+                    }
+
+                    ret[i][j] = entry;
+                }
+            }
+
+            return ret;
+        }
+
+        Linalg::Matrix add(Linalg::Matrix &mat) {
+            
+            auto sizeL = this->size();
+            auto sizeR = mat.size();
+            if(sizeL.first != sizeR.first && sizeL.second != sizeR.second) {
+                throw std::runtime_error("matrix addition: incompatible sizes");
+            }
+
+            auto n = sizeL.first;
+            auto m = sizeL.second;
+
+            Linalg::Matrix ret(n, m);
+            
+            for(size_t i = 0; i < n; ++i){
+                for(size_t j = 0; j < m; ++j) {
+                    ret[i][j] = (*this)[i][j] + mat[i][j];
+                }
+            }
+
+            return ret;
+        }
+
         Linalg::Matrix removeRow(size_t rowIdx) {
             bool flag = false;
             size_t n = this->size().first;
@@ -122,31 +169,6 @@ namespace Linalg {
 
         Linalg::Matrix removeRowCol(size_t rowIdx, size_t colIdx) {
             return this->removeCol(colIdx).removeRow(rowIdx);
-        }
-
-        Linalg::Matrix multiply(Linalg::Matrix &mat) {
-            auto sizeL = this->size();
-            auto sizeR = mat.size();
-            if(sizeL.second != sizeL.first) {
-                throw std::runtime_error("matrix multiplication: incompatible sizes");
-            }
-
-            size_t n = sizeL.first;
-            size_t m = sizeR.second;
-            Linalg::Matrix ret(sizeL.first, sizeL.second);
-
-            for(size_t i = 0; i < n; ++i){
-                for(size_t j = 0; j < m; ++j) {
-                    double entry = 0;
-                    for(size_t k = 0; k < sizeL.second; ++k) {
-                        entry += (*this)[i][k] * mat[k][j];
-                    }
-
-                    ret[i][j] = entry;
-                }
-            }
-
-            return ret;
         }
 
         private:

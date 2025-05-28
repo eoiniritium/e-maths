@@ -14,10 +14,10 @@ int main() {
     matrix[1][0] = 3;
     matrix[1][1] = 4;
 
-    auto id = Linalg::Matrix::identity(2).scale(5);
+    auto id = Linalg::Matrix::identity(2).scale(1);
 
     std::cout << id.string() << std::endl;
-    std::cout << matrix.multiply(id).string() << std::endl;
+    std::cout << id.add(matrix).string() << std::endl;
 
     return 0;
 }
