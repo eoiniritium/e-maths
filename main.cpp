@@ -2,22 +2,26 @@
 
 #include "vector.hpp"
 #include "matrix.hpp"
+#include "ml.hpp"
+
+double sigmoid(double x) {
+    return 1/(exp(1+x));
+}
+double d_sigmoid(double x) {
+    return 1/sigmoid(x);
+}
 
 int main() {
-    Linalg::Matrix matrix(2, 2);
+    ML::NeuralNetwork nn(sigmoid, d_sigmoid);
 
-    // Row 1
-    matrix[0][0] = 1;
-    matrix[0][1] = 2;
+    nn.addInputLayer(3);
+    nn.addHiddenLayer(1);
+    nn.addOutputLayer(10);
 
-    // Row 2
-    matrix[1][0] = 3;
-    matrix[1][1] = 4;
+    Linalg::Vector input(3, 0);
+    Linalg::Vector output = nn.feedForward(input);
 
-    auto id = Linalg::Matrix::identity(2).scale(1);
-
-    std::cout << id.string() << std::endl;
-    std::cout << id.add(matrix).string() << std::endl;
+    std::cout << output.string() << std::endl;
 
     return 0;
 }
