@@ -77,19 +77,30 @@ namespace ML {
             return layers.back().activation;
         }
 
+        void train(double learningRate) {
+
+        }
+
         private:
         void addLayer(size_t dimension) {
             layers.push_back(ML::Layer(dimension));
         }
 
-        double error(Linalg::Vector input, Linalg::Vector expected) {
+        Linalg::Vector error(Linalg::Vector input, Linalg::Vector expected) {
             Linalg::Vector errorVector = feedForward(input).subtract(expected);
 
-            return errorVector.dot(errorVector);
+            return errorVector;
         }
 
-        void backPropogation(double error, double learningRate) {
-            
+        void backPropogation(Linalg::Vector input, Linalg::Vector expected, double learningRate) {
+            Linalg::Vector error = feedForward(input).subtract(expected);
+            for(size_t idxLayer = layers.size()-1; idxLayer >= 0; --idxLayer) {
+                // SKIPPING BIASES FOR NOW
+
+                for(size_t nodeIDX = 0; nodeIDX < layers[idxLayer].dimension(); ++nodeIDX) {
+                    double partialNodeError = 
+                }
+            }
         }
     };
 }
